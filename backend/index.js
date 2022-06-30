@@ -15,7 +15,7 @@ app.use('/api/area', require('./routers/area.route'));
 app.use('/api/persona', require('./routers/persona.route'));
 app.use('/api/medio', require('./routers/medio.route'));
 app.use('/api/anuncio', require('./routers/anuncio.route'));
-
+app.use('/api/usuario', require('./routers/usuario.route'));
 
 //setting
 app.set('port', process.env.PORT || 3000);

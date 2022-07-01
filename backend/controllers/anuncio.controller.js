@@ -1,14 +1,28 @@
 const Anuncio = require("../models/anuncio");
 const anuncioCtrl = {};
-
+const qrcode= require('qrcode');
 /**
  * Recupera todos los Anuncios
  */
 anuncioCtrl.obtenerAnuncios = async (req, res) => {
-  var anuncios = await Anuncio.find().populate("redactor").populate("mediosDePublicacion").populate("destinatario");
+  var anuncios = await Anuncio.find()
+  .populate("redactor")
+  .populate("mediosDePublicacion")
+  .populate("destinatario")
+  .populate('area');
   
   res.json(anuncios);
 };
+
+anuncioCtrl.generarCodigoQR = async(req,res)=>{
+  var url = req.query.url;
+  const qr = await  qrcode.toDataURL(url);
+  res.json({
+    status:"1",
+    msg:"codigo qr creado correctamente",
+    codigoqr: qr
+  })
+}
 
 /**
  * Agregar un nuevo Anuncio
@@ -33,7 +47,11 @@ anuncioCtrl.crearAnuncio = async (req, res) => {
  * Obtener un Anuncio en especifico
  */
  anuncioCtrl.getAnuncio = async (req, res) => {
-  const anuncio = await Anuncio.findById(req.params.id);
+  const anuncio = await Anuncio.findById(req.params.id)
+  .populate('medio')
+  .populate('destinatario')
+  .populate('redactor')
+  .populate('area');
   res.json(anuncio);
 };
 

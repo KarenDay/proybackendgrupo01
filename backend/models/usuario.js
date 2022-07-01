@@ -5,7 +5,7 @@ const Rol =require ('./rol');
 const UsuarioSchema = new Schema({
 username: {type: String, required: true},
 password: {type:String, required:true},
-persona:{ type: mongoose.Types.ObjectId, ref: 'Persona', required: false},
+persona:{ type: Persona.schema},
 rol: {type: Rol.schema} //ADMINISTRADOR- ENCARGADO ETC
 });
 

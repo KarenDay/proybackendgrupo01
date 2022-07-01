@@ -44,7 +44,8 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
             username: user.username, //retorno información útil para el frontend
             rol: user.rol.nombreRol,
             //perfil: user.perfil, //retorno información útil para el frontend
-            userid: user._id //retorno información útil para el frontend
+            userid: user._id, //retorno información útil para el frontend
+            persona: user.persona._id
         })
     }
     

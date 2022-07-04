@@ -12,20 +12,27 @@ medioCtrl.obtenerMedios = async (req, res) => {
 /**
  * Agregar un nuevo Medio
  */
-medioCtrl.crearMedio = async (req, res) => {
+ medioCtrl.crearMedio = async (req, res) => {
   var medio = new Medio(req.body);
-
-  try {
-    await medio.save();
-    res.json({
-      status: "1",
-      msg: "Medio agregado Exitosamente",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "0",
-      msg: "Error al agregar Medio",
-    });
+  const medioEncontrado = await Medio.findOne({nombreMedio:{$eq:req.body.nombreMedio}});
+    if (medioEncontrado==null || medioEncontrado=="" || medioEncontrado==undefined) {
+      try {
+        await medio.save();
+        res.json({
+          status: "1",
+          msg: "Medio agregado Exitosamente",
+        });
+      } catch (error) {
+        res.status(400).json({
+          status: "0",
+          msg: "Error al agregar Medio",
+        });
+      }
+    }else{
+      res.json({
+          status:"2",
+          msg:"Ya se encuentra un medio registrado con ese nombre"
+      })
   }
 };
 /**
@@ -39,20 +46,28 @@ medioCtrl.crearMedio = async (req, res) => {
 /**
  * Actualizar un Medio
  */
-medioCtrl.editarMedio = async (req, res) => {
+ medioCtrl.editarMedio = async (req, res) => {
   const vmedio = new Medio(req.body);
-  try {
-    await Medio.updateOne({ _id: req.body._id }, vmedio);
-    res.json({
-      status: "1",
-      msg: "Medio Actualizado",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "0",
-      msg: "Error procesando la operacion - Actualizar",
-    });
-  }
+  const medioEncontrado = await Medio.findOne({nombreMedio:{$eq:req.body.nombreMedio}});
+    if (medioEncontrado==null || medioEncontrado=="" || medioEncontrado==undefined) {
+        try {
+          await Medio.updateOne({ _id: req.body._id }, vmedio);
+          res.json({
+            status: "1",
+            msg: "Medio Actualizado",
+          });
+        } catch (error) {
+          res.status(400).json({
+            status: "0",
+            msg: "Error procesando la operacion - Actualizar",
+          });
+        }
+      }else{
+        res.json({
+            status:"2",
+            msg:"Ya se encuentra un medio registrado con ese nombre"
+        })
+    }
 };
 
 /**

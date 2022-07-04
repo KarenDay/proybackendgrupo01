@@ -53,15 +53,10 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
 }
 
 usuarioCtrl.getUsuarioByPersona = async (req, res) => {
-    criteria={};
-    if (req.query.idPersona!= null){
-       criteria.persona= req.query.idPersona;
-    }
-    console.log(criteria.persona);
-    var usuario =  await Usuario.find({persona: ObjectId(req.query.idPersona)});
-    
+    console.log(req.query.dni);
+    var usuario =  await Usuario.find({"persona.dni":{$eq:req.query.dni}});
     res.json(usuario);
-    console.log("persona encontradas: "+usuario);
+    console.log("persona encontrada: "+usuario);
 }
 
 //exportacion del modulo controlador

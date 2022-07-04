@@ -5,10 +5,10 @@ const router = express.Router();
 
 router.get('/',areaCtrl.getAreas);
 router.post('/', areaCtrl.createArea);
-router.get('/getArea',areaCtrl.getArea);//modficado
-router.put('/update', areaCtrl.editArea);//mod
-router.delete('/delete', areaCtrl.deleteArea);//mod
-router.post('/addResponsable',areaCtrl.addResponsable);
-router.delete('/deleteResponsable', areaCtrl.deleteResponsable);
-
+router.get('/getArea',areaCtrl.getArea);
+router.put('/update', areaCtrl.editArea);
+router.delete('/delete', areaCtrl.deleteArea);
+//router.post('/addResponsable',areaCtrl.addResponsable);//No se utiliza
+//router.delete('/deleteResponsable', areaCtrl.deleteResponsable);//No se utiliza
+router.get('/filtro/nombre',areaCtrl.buscarAreaPorNombre);
 module.exports = router;

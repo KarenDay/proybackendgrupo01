@@ -1,6 +1,8 @@
 const Anuncio = require("../models/anuncio");
 const anuncioCtrl = {};
-const qrcode= require('qrcode');
+
+//const qrcode= require('qrcode');
+
 /**
  * Recupera todos los Anuncios
  */
@@ -14,7 +16,7 @@ anuncioCtrl.obtenerAnuncios = async (req, res) => {
   res.json(anuncios);
 };
 
-anuncioCtrl.generarCodigoQR = async(req,res)=>{
+/* anuncioCtrl.generarCodigoQR = async(req,res)=>{
   var url = req.query.url;
   const qr = await  qrcode.toDataURL(url);
   res.json({
@@ -22,14 +24,16 @@ anuncioCtrl.generarCodigoQR = async(req,res)=>{
     msg:"codigo qr creado correctamente",
     codigoqr: qr
   })
-}
+
+}*/
+
 
 /**
  * Agregar un nuevo Anuncio
  */
 anuncioCtrl.crearAnuncio = async (req, res) => {
   var anuncio = new Anuncio(req.body);
-
+  console.log(req.body);
   try {
     await anuncio.save();
     res.json({
@@ -48,7 +52,7 @@ anuncioCtrl.crearAnuncio = async (req, res) => {
  */
  anuncioCtrl.getAnuncio = async (req, res) => {
   const anuncio = await Anuncio.findById(req.params.id)
-  .populate('medio')
+  .populate('mediosDePublicacion')
   .populate('destinatario')
   .populate('redactor')
   .populate('area');
@@ -73,7 +77,6 @@ anuncioCtrl.editarAnuncio = async (req, res) => {
     });
   }
 };
-
 /**
  * Eliminar un Anuncio
  */
@@ -91,5 +94,49 @@ anuncioCtrl.eliminarAnuncio = async (req, res) => {
     });
   }
 };
+
+anuncioCtrl.getAnunciosPorArea  = async (req, res) => {
+  var estado= "CONFECCIONADO"
+  var anuncio =  await Anuncio.find({area:{$eq:req.query.area}})
+  .populate("redactor")
+  .populate("mediosDePublicacion")
+  .populate("destinatario")
+  .populate('area');
+  res.json(anuncio);
+}
+
+anuncioCtrl.getAnunciosPorAreaYEstado  = async (req, res) => {
+  var estado= "CONFECCIONADO"
+  var anuncio =  await Anuncio.find({$and:[
+                                      {area:{$eq:req.query.area}},
+                                      {estado:{$eq:estado}}
+                                  ]})
+  .populate("redactor")
+  .populate("mediosDePublicacion")
+  .populate("destinatario")
+  .populate('area');
+  res.json(anuncio);
+}
+
+
+anuncioCtrl.getAnunciosPorRedactor  = async (req, res) => {
+    
+  var anuncio =  await Anuncio.find({redactor:{$eq:req.query.redactor}})
+  .populate("redactor")
+  .populate("mediosDePublicacion")
+  .populate("destinatario")
+  .populate('area');
+  res.json(anuncio);
+}
+
+anuncioCtrl.getAnunciosPorRol  = async (req, res) => {
+    
+  var anuncio =  await Anuncio.find({destinatario:{$eq:req.query.rol}})
+  .populate("redactor")
+  .populate("mediosDePublicacion")
+  .populate("destinatario")
+  .populate('area');
+  res.json(anuncio);
+}
 
 module.exports = anuncioCtrl;

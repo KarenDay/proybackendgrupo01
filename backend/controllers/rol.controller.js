@@ -5,7 +5,7 @@ const rolCtrl = {};
  * Recupera todos los Roles disponibles
  */
 rolCtrl.obtenerRoles = async (req, res) => {
-  var roles = await Rol.find();
+  var roles = await Rol.find().populate('personas');
   res.json(roles);
 };
 
@@ -14,19 +14,25 @@ rolCtrl.obtenerRoles = async (req, res) => {
  */
 rolCtrl.crearRol = async (req, res) => {
   var rol = new Rol(req.body);
-  //console.log(req.body.nombreRol);
-  
-  try {
-    await rol.save();
-    res.json({
-      status: "1",
-      msg: "Rol agregado Exitosamente",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "0",
-      msg: "Error al agregar Rol",
-    });
+  const rolEncontrado = await Rol.findOne({nombreRol:{$eq:req.body.nombreRol}});
+    if (rolEncontrado==null || rolEncontrado=="" || rolEncontrado==undefined) {
+          try {
+            await rol.save();
+            res.json({
+              status: "1",
+              msg: "Rol agregado Exitosamente",
+            });
+          } catch (error) {
+            res.status(400).json({
+              status: "0",
+              msg: "Error al agregar Rol",
+            });
+          }
+    }else{
+      res.json({
+          status:"2",
+          msg:"Ya se encuentra un rol registrado con ese nombre"
+      })
   }
 };
 /**
@@ -41,18 +47,26 @@ rolCtrl.crearRol = async (req, res) => {
  */
 rolCtrl.editarRol = async (req, res) => {
   const bodyRol = new Rol(req.body);
-  try {
-    await Rol.updateOne({ _id: req.body._id }, bodyRol);
-    res.json({
-      status: "1",
-      msg: "Rol Actualizado",
-    });
-  } catch (error) {
-    res.status(400).json({
-      status: "0",
-      msg: "Error procesando la operacion - Actualizar",
-    });
-  }
+  const rolEncontrado = await Rol.findOne({nombreRol:{$eq:req.body.nombreRol}});
+    if (rolEncontrado==null || rolEncontrado=="" || rolEncontrado==undefined) {
+        try {
+          await Rol.updateOne({ _id: req.body._id }, bodyRol);
+          res.json({
+            status: "1",
+            msg: "Rol Actualizado",
+          });
+        } catch (error) {
+          res.status(400).json({
+            status: "0",
+            msg: "Error procesando la operacion - Actualizar",
+          });
+        }
+    }else{
+        res.json({
+            status:"2",
+            msg:"Ya se encuentra un rol registrado con ese nombre"
+        })
+    }
 };
 /**
  * Eliminar un Rol

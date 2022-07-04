@@ -1,6 +1,8 @@
 const Anuncio = require("../models/anuncio");
 const anuncioCtrl = {};
+
 //const qrcode= require('qrcode');
+
 /**
  * Recupera todos los Anuncios
  */
@@ -22,7 +24,9 @@ anuncioCtrl.obtenerAnuncios = async (req, res) => {
     msg:"codigo qr creado correctamente",
     codigoqr: qr
   })
-} */
+
+}*/
+
 
 /**
  * Agregar un nuevo Anuncio

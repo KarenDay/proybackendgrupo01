@@ -44,7 +44,8 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
             username: user.username, //retorno información útil para el frontend
             rol: user.rol.nombreRol,
             //perfil: user.perfil, //retorno información útil para el frontend
-            userid: user._id //retorno información útil para el frontend
+            userid: user._id, //retorno información útil para el frontend
+            persona: user.persona._id
         })
     }
     
@@ -52,15 +53,10 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
 }
 
 usuarioCtrl.getUsuarioByPersona = async (req, res) => {
-    criteria={};
-    if (req.query.idPersona!= null){
-       criteria.persona= req.query.idPersona;
-    }
-    console.log(criteria.persona);
-    var usuario =  await Usuario.find({persona: ObjectId(req.query.idPersona)});
-    
+    console.log(req.query.dni);
+    var usuario =  await Usuario.find({"persona.dni":{$eq:req.query.dni}});
     res.json(usuario);
-    console.log("persona encontradas: "+usuario);
+    console.log("persona encontrada: "+usuario);
 }
 
 //exportacion del modulo controlador

@@ -1,5 +1,8 @@
 const anuncioCtrl = require("./../controllers/anuncio.controller");
 
+const autCtrl = require('./../controllers/auth.controller');
+
+
 const express = require("express");
 const router = express.Router();
 

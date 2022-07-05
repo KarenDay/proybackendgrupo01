@@ -1,4 +1,8 @@
 const Usuario = require ('./../models/usuario')
+
+//importamos el manejador de token
+const jwt = require('jsonwebtoken');
+
 const usuarioCtrl = {}
 //const ObjectId = require('mongodb').ObjectID;
 var ObjectId = require('mongoose').Types.ObjectId; 
@@ -38,6 +42,10 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
         status: 0,
         msg: "not found" })
     } else {
+
+        //preparo un token para ser enviado en caso de loguin correcto
+        const unToken = jwt.sign({id: user._id}, "secretkey");
+
         res.json({
             status: 1,
             msg: "success",
@@ -45,7 +53,8 @@ usuarioCtrl.loginUsuario = async (req, res)=>{
             rol: user.rol.nombreRol,
             //perfil: user.perfil, //retorno información útil para el frontend
             userid: user._id, //retorno información útil para el frontend
-            persona: user.persona._id
+            persona: user.persona._id,
+            token: unToken //retorno del token
         })
     }
     

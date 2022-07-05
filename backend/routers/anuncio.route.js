@@ -5,6 +5,8 @@ const router = express.Router();
 
 
 router.get("/", anuncioCtrl.obtenerAnuncios);
+router.get("/busquedaRangoFecha", anuncioCtrl.anunciosPorFechas);
+router.get("/busquedaAvanzada", anuncioCtrl.busquedaDatosCombinadaPlus);
 router.post("/", anuncioCtrl.crearAnuncio);
 router.get("/:id", anuncioCtrl.getAnuncio);
 router.put("/:id", anuncioCtrl.editarAnuncio);

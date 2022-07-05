@@ -8,11 +8,11 @@ const anuncioCtrl = {};
  */
 anuncioCtrl.obtenerAnuncios = async (req, res) => {
   var anuncios = await Anuncio.find()
-  .populate("redactor")
-  .populate("mediosDePublicacion")
-  .populate("destinatario")
-  .populate('area');
-  
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+
   res.json(anuncios);
 };
 
@@ -26,7 +26,6 @@ anuncioCtrl.obtenerAnuncios = async (req, res) => {
   })
 
 }*/
-
 
 /**
  * Agregar un nuevo Anuncio
@@ -50,12 +49,12 @@ anuncioCtrl.crearAnuncio = async (req, res) => {
 /**
  * Obtener un Anuncio en especifico
  */
- anuncioCtrl.getAnuncio = async (req, res) => {
+anuncioCtrl.getAnuncio = async (req, res) => {
   const anuncio = await Anuncio.findById(req.params.id)
-  .populate('mediosDePublicacion')
-  .populate('destinatario')
-  .populate('redactor')
-  .populate('area');
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("redactor")
+    .populate("area");
   res.json(anuncio);
 };
 
@@ -95,48 +94,112 @@ anuncioCtrl.eliminarAnuncio = async (req, res) => {
   }
 };
 
-anuncioCtrl.getAnunciosPorArea  = async (req, res) => {
-  var estado= "CONFECCIONADO"
-  var anuncio =  await Anuncio.find({area:{$eq:req.query.area}})
+anuncioCtrl.getAnunciosPorArea = async (req, res) => {
+  var estado = "CONFECCIONADO";
+  var anuncio = await Anuncio.find({ area: { $eq: req.query.area } })
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+  res.json(anuncio);
+};
+
+anuncioCtrl.getAnunciosPorAreaYEstado = async (req, res) => {
+  var estado = "CONFECCIONADO";
+  var anuncio = await Anuncio.find({
+    $and: [{ area: { $eq: req.query.area } }, { estado: { $eq: estado } }],
+  })
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+  res.json(anuncio);
+};
+
+anuncioCtrl.getAnunciosPorRedactor = async (req, res) => {
+  var anuncio = await Anuncio.find({ redactor: { $eq: req.query.redactor } })
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+  res.json(anuncio);
+};
+
+anuncioCtrl.getAnunciosPorRol = async (req, res) => {
+  var anuncio = await Anuncio.find({ destinatario: { $eq: req.query.rol } })
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+  res.json(anuncio);
+};
+
+//BUSQUEDA AVANZADA
+anuncioCtrl.busquedaDatosCombinada = async (req, res) => {
+  var anuncio = await Anuncio.find({
+    $or: [
+      { textoAnuncio: { $regex: req.query.textoAnuncio, $options: "i" } },
+      { estado: { $eq: req.query.estado } },
+      {
+        $and: [
+          { fechaEntrega: { $gte: req.query.start } },
+          { fechaEntrega: { $lte: req.query.end } },
+        ],
+      },
+    ],
+  });
+  res.json(anuncio);
+  console.log(res.json);
+};
+anuncioCtrl.busquedaDatosCombinadaPlus = async (req, res) => {
+  criteria = {};
+  if (req.query.textoAnuncio != null) {
+    //criteria.textoAnuncio= req.query.textoAnuncio;
+    criteria.textoAnuncio = { $regex: req.query.textoAnuncio, $options: "i" };
+  }
+  if (req.query.estado != null) {
+    //criteria.estado = req.query.estado;
+    criteria.estado = { $regex: req.query.estado, $options: "i" };
+  }
+
+  var anuncio = await Anuncio.find(criteria)
+    .populate("redactor")
+    .populate("mediosDePublicacion")
+    .populate("destinatario")
+    .populate("area");
+  res.json(anuncio);
+};
+
+anuncioCtrl.anunciosPorFechas = async (req, res) => {
+  var anuncio = await Anuncio.find({
+    $and: [
+      { fechaEntrega: { $gte: req.query.start } },
+      { fechaEntrega: { $lte: req.query.end } },
+    ],
+  })
   .populate("redactor")
   .populate("mediosDePublicacion")
   .populate("destinatario")
-  .populate('area');
+  .populate("area");;
   res.json(anuncio);
-}
+  
+  /* $expr: {
+    $and: [
+      { $eq: [{ $year: req.query.año }, { $year: req.query.año }]},
+      { $eq: [{ $month: "$fecha" }, { $month: req.query.mes }]},
+      { $eq: [{ $dayOfMonth: "$fecha" }, { $dayOfMonth: req.query.dia }]}
+    ]
+  } */
+  /* { 
+    $or: [
+      {fechaEntrega: {$gte: req.query.start}},
+      {fechaEntrega: {$lte: req.query.end}}
+    ]
+  } */
 
-anuncioCtrl.getAnunciosPorAreaYEstado  = async (req, res) => {
-  var estado= "CONFECCIONADO"
-  var anuncio =  await Anuncio.find({$and:[
-                                      {area:{$eq:req.query.area}},
-                                      {estado:{$eq:estado}}
-                                  ]})
-  .populate("redactor")
-  .populate("mediosDePublicacion")
-  .populate("destinatario")
-  .populate('area');
-  res.json(anuncio);
-}
-
-
-anuncioCtrl.getAnunciosPorRedactor  = async (req, res) => {
-    
-  var anuncio =  await Anuncio.find({redactor:{$eq:req.query.redactor}})
-  .populate("redactor")
-  .populate("mediosDePublicacion")
-  .populate("destinatario")
-  .populate('area');
-  res.json(anuncio);
-}
-
-anuncioCtrl.getAnunciosPorRol  = async (req, res) => {
-    
-  var anuncio =  await Anuncio.find({destinatario:{$eq:req.query.rol}})
-  .populate("redactor")
-  .populate("mediosDePublicacion")
-  .populate("destinatario")
-  .populate('area');
-  res.json(anuncio);
-}
+  /* if (req.query.fechaEntrega != null) {
+    criteria.fechaEntrega = req.query.fechaEntrega;
+  } */
+};
 
 module.exports = anuncioCtrl;

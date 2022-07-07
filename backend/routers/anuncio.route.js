@@ -2,7 +2,6 @@ const anuncioCtrl = require("./../controllers/anuncio.controller");
 
 const autCtrl = require('./../controllers/auth.controller');
 
-
 const express = require("express");
 const router = express.Router();
 
@@ -18,6 +17,5 @@ router.get("/filtro/area", anuncioCtrl.getAnunciosPorArea);
 router.get("/filtro/redactor", anuncioCtrl.getAnunciosPorRedactor);
 router.get("/filtro/areaYestado", anuncioCtrl.getAnunciosPorAreaYEstado);
 router.get("/filtro/rol", anuncioCtrl.getAnunciosPorRol);
-//router.get("/codigoqr",anuncioCtrl.generarCodigoQR);
 module.exports = router;
 

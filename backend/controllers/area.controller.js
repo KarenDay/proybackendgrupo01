@@ -75,53 +75,6 @@ areaCtrl.deleteArea = async (req, res)=>{
         }
 }
 
-//No se utiliza
-// areaCtrl.addResponsable = async (req,res)=>{
-//     const idArea = req.query.id;
-//     const idResp = req.query.idResponsable;
-//     var area = await Area.findById(idArea);
-//     var responsable = await Persona.findById(idResp);
-//     try{
-//         area.responsables.push(idResp);
-//         await Area.updateOne({_id:area._id}, area); 
-//         responsable.area=area;
-//         await Persona.updateOne({_id:responsable._id}, responsable);
-//         res.status(200).json({
-//             'status':'1',
-//             'msg':'Responsable agregado'
-//         })
-//     }catch{
-//         res.status(400).json({
-//             'status':'0',
-//             'msg':'Error al procesar la informacion'
-//         })
-//     }
-// }
-
-//No se utiliza
-// areaCtrl.deleteResponsable = async (req,res)=>{
-    
-//     const idArea = req.query.id;
-//     const idResponsable = req.query.idResponsable;
-//     var area = await Area.findById(idArea);
-//     var responsable =  await Persona.findById(idResponsable);
-//     try{
-//         area.responsables.pull(idResponsable);
-//         await Area.updateOne({_id:idArea},area);
-//         responsable.area = undefined;
-//         await Persona.updateOne({_id:responsable._id},responsable);
-//         res.status(200).json({
-//             'status':'1',
-//             'msg':'Responsable eliminado'
-//         })
-//     }catch{
-//         res.status(400).json({
-//             'status':'0',
-//             'msg':'Error al procesar la informacion'
-//         })
-//     }
-// }
-
 areaCtrl.buscarAreaPorNombre = async (req, res) => {
     let criteria={};
     if(req.query.nombreArea!=null || req.query.nombreArea!="")

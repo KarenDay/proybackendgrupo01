@@ -6,7 +6,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", autCtrl.verifyToken,  medioCtrl.obtenerMedios);
-router.post("/", autCtrl.verifyToken,  medioCtrl.crearMedio);
+router.post("/",  medioCtrl.crearMedio);
 router.get("/:id", autCtrl.verifyToken,  medioCtrl.getMedio);
 router.put("/:id", autCtrl.verifyToken,  medioCtrl.editarMedio);
 router.delete("/eliminar/:idMedio", autCtrl.verifyToken,  medioCtrl.eliminarMedio);

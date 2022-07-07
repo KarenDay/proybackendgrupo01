@@ -168,49 +168,6 @@ personaCtrl.deleteRol = async (req,res)=>{
     }
 }
 
-// No se utilizar
-// personaCtrl.addArea = async(req,res)=>{
-//     const idArea = req.query.idArea;
-//     const idPersona = req.query.id;
-//     //var area = await Area.findById(idArea);
-//     var persona = await Persona.findById(idPersona);
-//     try{
-//         persona.area= idArea;
-//         await persona.save();
-//         res.status(200).json({
-//             'status':'1',
-//             'msg':'Area agregada'
-//         })
-//     }catch{
-//         res.status(400).json({
-//             'status':'0',
-//             'msg':'Error al procesar la informacion'
-//         })
-//     }
-// }
-
-//No se utiliza
-// personaCtrl.deleteArea = async (req,res)=>{
-//     const idPersona = req.query.id;
-//     const persona = await Persona.findById(idPersona);
-//     //const idArea = req.query.idArea;
-//     try{
-//         persona.area=undefined;
-//         await Persona.updateOne({_id:idPersona},persona);
-       
-//         res.status(200).json({
-//             'status':'1',
-//             'msg':'Area eliminada, la persona ya no pertenece a un Area'
-//         })
-//     }catch{
-//         res.status(400).json({
-//             'status':'0',
-//             'msg':'Error al procesar la informacion'
-//         })
-//     }
-// }
-
-
 personaCtrl.getPersonaByDni = async (req, res) => {
     criteria={};
     if (req.query.dni != null){
@@ -229,18 +186,5 @@ personaCtrl.busquedaCombinada  = async (req, res) => {
                                         ]}).populate('roles');
     res.json(persona);
 }
-//no se utiliza
-// personaCtrl.getEncargados = async (req, res)=>{
-//      var persona = await Persona.find({$and:[
-//                                             {area:{$eq:req.query.idArea}},
-//                                             {roles:{$eq:req.query.idRol}}
-//                                         ]})
-//     console.log(persona);
-//     res.json(persona);
-// }
-//no se utiliza
-// personaCtrl.getPersonaByRol = async(req,res)=>{
-//     var persona =  await Persona.find({rol:{$eq:req.query.idRol}}).populate('roles');
-//     res.json(persona);
-// }
+
 module.exports = personaCtrl;

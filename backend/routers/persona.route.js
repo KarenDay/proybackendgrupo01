@@ -8,11 +8,11 @@ const router = express.Router();
 
 //router.get('/filtro/encargados', personaCtrl.getEncargados);//no se utiliza
 router.get('/', autCtrl.verifyToken, personaCtrl.getPersonas);
-router.post('/', autCtrl.verifyToken, personaCtrl.createPersona);
-router.get('/getpersona', autCtrl.verifyToken, personaCtrl.getPersona);
+router.post('/', personaCtrl.createPersona);
+router.get('/getpersona',  personaCtrl.getPersona);
 router.put('/update', autCtrl.verifyToken, personaCtrl.editPersona);
 router.delete('/delete', autCtrl.verifyToken, personaCtrl.deletePersona);
-router.put('/addRol', autCtrl.verifyToken, personaCtrl.addRol);
+router.put('/addRol', personaCtrl.addRol);
 router.delete('/deleteRol', autCtrl.verifyToken, personaCtrl.deleteRol); 
 router.get('/filtro/dni', autCtrl.verifyToken, personaCtrl.getPersonaByDni);
 router.get('/busquedaCombinada', autCtrl.verifyToken, personaCtrl.busquedaCombinada);
